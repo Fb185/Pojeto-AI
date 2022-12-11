@@ -20,7 +20,7 @@ def buildVocabulary(currentEmail, tag):
     elif(tag == 'ham'):
         index = 1
         for word in currentEmail:
-            if word.lower() in setOfWords and word.lower() not in hamWords: # if the word is english
+            if word.lower() in setOfWords and word.lower() not in hamWords:
                 hamWords.update({word:index})
                 index +=1
             if word.lower() in setOfWords and word.lower in hamWords:
@@ -30,15 +30,18 @@ def buildVocabulary(currentEmail, tag):
 if __name__ == "__main__":
     with open('data/spamHamDataset.csv') as file:
         dataset = csv.reader(file)
-    for row in dataset:
-        tag = row[0]
-        currentEmail = row[1].split(" ")
-        print(f"current email is {row}\
-                ham word count: {len(hamWords)}\
-                spam word count:{len(spamWords)}")
-        # print(f'current email is {i}/{len(dataset)} and the length of the vocabulary is:\
-        #         {len(vocabulary)}')
-        # buildVocabulary(currentEmail)
+        count = 0
+        for row in dataset:
+            tag = row[0]
+            currentEmail = row[1].split(" ")
+            buildVocabulary(currentEmail, tag)
+            # if (count > 5):
+            #     break
+            # count +=1
+            # print(f"current email is {tag}\
+            #         ham word count: {len(hamWords)}\
+            #         spam word count:{len(spamWords)}")
+            # print(f"ham words {hamWords}")
 
     hamfile = open("hamBag.txt", "w")
     hamfile.write(str(hamWords))
@@ -46,5 +49,4 @@ if __name__ == "__main__":
     spamfile = open("spamBag.txt", "w")
     spamfile.write(str(spamWords))
     spamfile.close()
-
 

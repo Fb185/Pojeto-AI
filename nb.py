@@ -1,2 +1,2 @@
-def func():
-    print("NB")
+def naivebayes(hambag, spambag):
+    pass
