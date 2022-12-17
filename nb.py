@@ -12,8 +12,13 @@ with open("./data/hamBag.txt") as hb:
 
 
 
+
 hamPriorProbability = len(hamBag)/(len(hamBag) + len(spamBag))
 spamPriorProbability = len(spamBag)/(len(spamBag) + len(hamBag))
 print("hamPriorProbability = ", hamPriorProbability)
 print("spamPriorProbability = ", spamPriorProbability)
+
+
+
     
+
