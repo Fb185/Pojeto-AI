@@ -1,15 +1,19 @@
 import pdb
 import json
-with open("./spamBag.txt") as spamBag:
-    spam = spamBag.read()
+with open("./data/spamBag.txt") as sp:
+    spam = sp.read()
     spam = spam.replace("\'", "\"")
     spamBag = json.loads(spam)
 
-with open("./hamBag.txt") as hamBag:
-    ham = hamBag.read()
+with open("./data/hamBag.txt") as hb:
+    ham = hb.read()
     ham = ham.replace("\'", "\"")
     hamBag = json.loads(ham)
 
-global hamPriorProbability == len(hamBag)/(len(hamBag) + len(spamBag))
-global spamPrioroProbability
+
+
+hamPriorProbability = len(hamBag)/(len(hamBag) + len(spamBag))
+spamPriorProbability = len(spamBag)/(len(spamBag) + len(hamBag))
+print("hamPriorProbability = ", hamPriorProbability)
+print("spamPriorProbability = ", spamPriorProbability)
     

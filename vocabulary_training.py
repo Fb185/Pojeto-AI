@@ -51,10 +51,10 @@ if __name__ == "__main__":
             currentEmail = row[1].split(" ")
             buildVocabulary(currentEmail, tag)
 
-    hamfile = open("hamBag.txt", "w")
+    hamfile = open("./data/hamBag.txt", "w")
     hamfile.write(str(hamWords))
     hamfile.close()
-    spamfile = open("spamBag.txt", "w")
+    spamfile = open("./data/spamBag.txt", "w")
     spamfile.write(str(spamWords))
     spamfile.close()
 
