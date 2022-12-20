@@ -43,26 +43,26 @@ def buildVocabulary(currentEmail, tag):
                 hamWords[word][0] +=1
     determineProbabilityOfEachWord(spamWords, hamWords)
 
-def removePunctuation(c):
-    characterList = ["*", "!", "?", ",", "-", ".", "/", ";", "_", "{", "}", "%", ":", "(", ")", "<", ">"]
-    for i in characterList:
-        if(c==i):
-            c = ""
 
+import string
 
+def removePunctuation(input_string):
+  # Make a translation table to remove punctuation
+  translator = str.maketrans('', '', string.punctuation)
+
+  # Use this table to remove all punctuation from the input_string
+  no_punct = input_string.translate(translator)
+  return no_punct
 
 if __name__ == "__main__":
     with open('data/spamHamDataset.csv') as file:
         dataset = csv.reader(file)
-        pdb.set_trace()
         for row in dataset:
             tag = row[0]
             email = row[1]
-            # for i in email:
-            #     removePunctuation(email[i])
-
-                    
-            currentEmail = row[1].split(" ")
+            email = removePunctuation(email)
+            currentEmail = email.split(" ")
+            # pdb.set_trace()
             buildVocabulary(currentEmail, tag)
 
     hamfile = open("./data/hamBag.txt", "w")
