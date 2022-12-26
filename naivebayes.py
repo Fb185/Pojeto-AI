@@ -1,6 +1,7 @@
 
 import csv
 import math
+
 from collections import defaultdict
 
 def word_counts(email):
