@@ -1,4 +1,4 @@
-def sdk():
+def main():
     '''puzzle=[
         [5, 3, 0, 0, 7, 0, 0, 0, 0],
         [6, 0, 0, 1, 9, 5, 0, 0, 0],
@@ -108,5 +108,4 @@ def revise(csp, Xi, Xj):
     return revised
 
 if __name__ == "__main__":
-    sdk()
-
+    main()

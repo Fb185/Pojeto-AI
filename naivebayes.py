@@ -4,62 +4,7 @@ import math
 
 from collections import defaultdict
 
-def word_counts(email):
-    """Returns a dictionary of word counts for the given email"""
-    counts = defaultdict(int)
-    for word in email.split():
-        counts[word] += 1
-    return counts
-
-def train_naive_bayes(emails):
-    """Trains a multinomial naive Bayes classifier on the given emails"""
-    # Count the number of spam and ham emails
-    num_spam = sum(1 for label, _ in emails if label == "spam")
-    num_ham = len(emails) - num_spam
-
-    # Calculate the prior probabilities of the two classes
-    prior_spam = num_spam / len(emails)
-    prior_ham = num_ham / len(emails)
-
-    # Count the number of times each word appears in spam and ham emails
-    word_counts_spam = defaultdict(int)
-    word_counts_ham = defaultdict(int)
-    for label, counts in emails:
-        if label == "spam":
-            for word, count in counts.items():
-                word_counts_spam[word] += count
-        else:
-            for word, count in counts.items():
-                word_counts_ham[word] += count
-
-    # Calculate the conditional probabilities for each word in the vocabulary
-    vocabulary = set(word for _, counts in emails for word in counts)
-    cond_probs_spam = defaultdict(lambda: 1 / (num_spam + 2))
-    cond_probs_ham = defaultdict(lambda: 1 / (num_ham + 2))
-    for word in vocabulary:
-        cond_probs_spam[word] = (word_counts_spam[word] + 1) / (num_spam + 2)
-        cond_probs_ham[word] = (word_counts_ham[word] + 1) / (num_ham + 2)
-
-    return prior_spam, prior_ham, cond_probs_spam, cond_probs_ham
-
-def classify(prior_spam, prior_ham, cond_probs_spam, cond_probs_ham, email):
-    """Classifies the given email as spam or ham using the trained naive Bayes classifier"""
-    counts = word_counts(email)
-
-    # Calculate the probability of the email being spam or ham
-    prob_spam = math.log(prior_spam)
-    prob_ham = math.log(prior_ham)
-    for word, count in counts.items():
-        prob_spam += count * math.log(cond_probs_spam[word])
-        prob_ham += count * math.log(cond_probs_ham[word])
-
-    # Return the most likely label
-    if prob_spam > prob_ham:
-        return "spam"
-    else:
-        return "ham"
-
-if __name__ == "__main__":
+def main():
     emails = []
     with open("./data/spamHamDataset.csv", "r") as f:
         # Read the emails from the CSV file
@@ -116,4 +61,64 @@ if __name__ == "__main__":
     print("Accuracy: {:.2f}%".format(accuracy))
     for email, label in zip(test_emails, y_pred):
         print(email[1], ":", label)
+
+
+def word_counts(email):
+    """Returns a dictionary of word counts for the given email"""
+    counts = defaultdict(int)
+    for word in email.split():
+        counts[word] += 1
+    return counts
+
+def train_naive_bayes(emails):
+    """Trains a multinomial naive Bayes classifier on the given emails"""
+    # Count the number of spam and ham emails
+    num_spam = sum(1 for label, _ in emails if label == "spam")
+    num_ham = len(emails) - num_spam
+
+    # Calculate the prior probabilities of the two classes
+    prior_spam = num_spam / len(emails)
+    prior_ham = num_ham / len(emails)
+
+    # Count the number of times each word appears in spam and ham emails
+    word_counts_spam = defaultdict(int)
+    word_counts_ham = defaultdict(int)
+    for label, counts in emails:
+        if label == "spam":
+            for word, count in counts.items():
+                word_counts_spam[word] += count
+        else:
+            for word, count in counts.items():
+                word_counts_ham[word] += count
+
+    # Calculate the conditional probabilities for each word in the vocabulary
+    vocabulary = set(word for _, counts in emails for word in counts)
+    cond_probs_spam = defaultdict(lambda: 1 / (num_spam + 2))
+    cond_probs_ham = defaultdict(lambda: 1 / (num_ham + 2))
+    for word in vocabulary:
+        cond_probs_spam[word] = (word_counts_spam[word] + 1) / (num_spam + 2)
+        cond_probs_ham[word] = (word_counts_ham[word] + 1) / (num_ham + 2)
+
+    return prior_spam, prior_ham, cond_probs_spam, cond_probs_ham
+
+def classify(prior_spam, prior_ham, cond_probs_spam, cond_probs_ham, email):
+    """Classifies the given email as spam or ham using the trained naive Bayes classifier"""
+    counts = word_counts(email)
+
+    # Calculate the probability of the email being spam or ham
+    prob_spam = math.log(prior_spam)
+    prob_ham = math.log(prior_ham)
+    for word, count in counts.items():
+        prob_spam += count * math.log(cond_probs_spam[word])
+        prob_ham += count * math.log(cond_probs_ham[word])
+
+    # Return the most likely label
+    if prob_spam > prob_ham:
+        return "spam"
+    else:
+        return "ham"
+
+if __name__ == "__main__":
+    main()
+
 
