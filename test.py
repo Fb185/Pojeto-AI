@@ -61,8 +61,10 @@ def train(X):
   for j in range(n):
     p[0][j] = (p[0][j] + 1) / (wspam + 2)  # Add a small positive value to p[0][j] to prevent math domain error
     p[1][j] = (p[1][j] + 1) / (wham + 2)  # Add a small positive value to p[1][j] to prevent math domain error
+  
+  return b
 
-def classify(test_file):
+def classify(test_file, b):
   # Read test data from CSV file
   test_documents = []
   test_labels = []
@@ -94,6 +96,9 @@ def classify(test_file):
 
   return precision
 
-precision = classify("./data/shortdataset.csv")
-print(f'Precision: {precision:.2f}')
+
+b = train("./data/shortdataset.csv")
+precision = classify("./data/testSet.csv", b)
+print(f'Precision: {precision:.9f}')
+
 
