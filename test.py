@@ -34,29 +34,23 @@ def train(X, validation_data):
   # Initialize b
     b = math.log(c) + math.log(mham) - math.log(mspam)
 
-  # Initialize p with pij = i, wspam = n, wham = n
+  # Initialize matrix p with pij = i, wspam = n, wham = n
     p = [[0] * n for _ in range(2)]
     wspam = n
     wham = n
 
-  # Count occurrence of each word
+  # Counts occurrence of each word
     for i in range(m):
         if labels[i] == 'spam':
             for j in range(n):
                 word = list(dictionary)[j]
                 p[0][j] += documents[i].count(word)
                 wspam += documents[i].count(word)
-                print("found in spam: ", word)
-                print("spam email n ", i)
-                print("wspam so far: ", wspam)
         else:
             for j in range(n):
                 word = list(dictionary)[j]
                 p[1][j] += documents[i].count(word)
                 wham += documents[i].count(word)
-                print("found in ham: ", word)
-                print("ham email n ", i)
-                print("wham so far: ", wspam)
 
 
   # Normalize counts to yield word probabilities
@@ -64,9 +58,24 @@ def train(X, validation_data):
         p[0][j] = (p[0][j]+1) / (wspam + 2)  # Add a small positive value to p[0][j] to prevent math domain error
         p[1][j] = (p[1][j]+1) / (wham + 2)  # Add a small positive value to p[1][j] to prevent math domain error
 
+    # validation_documents, validation_labels = validation_data
+    # correct = 0
+    # for i in range(len(validation_labels)):
+    #     score_threshold = 0
+    #     for j in range(n):
+    #         word = list(dictionary)[j]
+    #         score_threshold += validation_documents[i].count(word) * (math.log(p[0][j]) - math.log(p[1][j]))
+
+    #     if score_threshold > 0 and validation_labels[i] == 'spam':
+    #         correct += 1
+    #     elif score_threshold <= 0 and validation_labels[i] == 'ham':
+    #         correct += 1
+
+    # precision = correct / len(validation_labels)
+
     print("total words of spam: ", wspam)
     print("total words of ham: ", wham)
-    return b, p
+    return b, p#, precision
 
 
 def classify(x, b, p):
@@ -93,10 +102,14 @@ def evaluate(test_file, b, p):
             test_documents.append(row[1])
             test_labels.append(row[0])
 
+    # print(len(test_documents), len(test_labels))
   # Classify test documents and compare to true labels
     correct = 0
     for i in range(len(test_documents)):
         prediction = classify(test_documents[i], b, p)
+        # print("email:", test_documents[i], "label:", test_labels[i])
+        # print("prediction:", prediction)
+        # print("")
         if prediction == test_labels[i]:
             correct += 1
 
@@ -105,8 +118,8 @@ def evaluate(test_file, b, p):
     return precision
 
 
-X = './data/shortdataset.csv'
-# X = './data/spamHamDataset.csv'
+# X = './data/shortdataset.csv'
+X = './data/spamHamDataset.csv'
 
 # Train classifier
 b, p = train(X, './data/validationSet.csv')
