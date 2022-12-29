@@ -1,3 +1,4 @@
+#comment
 def main(puzzle):
     csp = create_sudoku_csp(puzzle)
     if AC3(csp):

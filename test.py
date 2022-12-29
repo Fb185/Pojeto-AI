@@ -119,8 +119,8 @@ def evaluate(test_file, b, p):
     return precision
 
 
-# X = './data/shortdataset.csv'
-X = './data/spamHamDataset.csv'
+X = './data/shortdataset.csv'
+# X = './data/spamHamDataset.csv'
 
 # Train classifier
 b, p = train(X, './data/validationSet.csv')
