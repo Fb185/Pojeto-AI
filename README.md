@@ -42,7 +42,7 @@ This function performs the following steps:
 
     Returns the bias term b.
 
-###`classify(test_file, b)`
+### `classify(test_file, b)`
 
 This function performs the following steps:
 
