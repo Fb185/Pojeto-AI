@@ -46,9 +46,9 @@ This function performs the following steps:
 
 This function performs the following steps:
 
-    Reads the test dataset from the file at filepath test_file and stores the documents and labels in separate lists.
+1. Reads the test dataset from the file at filepath test_file and stores the documents and labels in separate lists.
 
-    Loops through the test documents and computes the score for each document using the following formula:
+2. Loops through the test documents and computes the score for each document using the following formula:
 
 `score_threshold = -b
 for j in range(n):
@@ -57,11 +57,11 @@ for j in range(n):
 
 This formula calculates the sum of the log probabilities that each word in the dictionary appears in a 'spam' document, minus the sum of the log probabilities that each word appears in a 'ham' document.
 
-    If the score is greater than 0, the document is classified as 'spam'; otherwise, it is classified as 'ham'. The predicted label is added to a list of predictions.
+3. If the score is greater than 0, the document is classified as 'spam'; otherwise, it is classified as 'ham'. The predicted label is added to a list of predictions.
 
-    Calculates the precision of the classifier by comparing the predicted labels to the true labels and dividing the number of correct predictions by the total number of predictions.
+4. Calculates the precision of the classifier by comparing the predicted labels to the true labels and dividing the number of correct predictions by the total number of predictions.
 
-    Returns the precision.
+5. Returns the precision.
 
 Example
 
