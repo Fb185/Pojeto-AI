@@ -2,7 +2,7 @@
 import csv
 import math
 
-c = 1
+c = 0.8
 global b
 def train(X, validation_data):
 
@@ -98,7 +98,7 @@ def evaluate(test_file, b, p):
   # Read test data from CSV file
     test_documents = []
     test_labels = []
-    with open(test_file, 'r') as csv_file:
+    with open(test_file, 'r', encoding='cp850') as csv_file:
         csv_reader = csv.reader(csv_file)
         for row in csv_reader:
             test_documents.append(row[1])
@@ -120,8 +120,8 @@ def evaluate(test_file, b, p):
     return precision
 
 def main():
-    # X = './data/shortdataset.csv'
-    X = './data/spamHamDataset.csv'
+    X = './data/shortdataset.csv'
+    # X = './data/spamHamDataset.csv'
 
     # Train classifier
     b, p = train(X, './data/validationSet.csv')
