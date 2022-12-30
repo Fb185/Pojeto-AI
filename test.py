@@ -1,7 +1,7 @@
 import csv
 import math
 
-c = 1
+c = 0.6
 global b
 def train(X, validation_data):
 
@@ -38,25 +38,39 @@ def train(X, validation_data):
     p = [[0] * n for _ in range(2)]
     wspam = n
     wham = n
+    count1=0
+    count2=0
 
   # Counts occurrence of each word
     for i in range(m):
+        count1+=1
         if labels[i] == 'spam':
+            print("started count2")
             for j in range(n):
+                count2+=1
                 word = list(dictionary)[j]
                 p[0][j] += documents[i].count(word)
                 wspam += documents[i].count(word)
+            print(count2)
+
         else:
+            print("started count2")
             for j in range(n):
+                count2+=1
                 word = list(dictionary)[j]
                 p[1][j] += documents[i].count(word)
                 wham += documents[i].count(word)
+            print(count2)
+        print("count1 :", count1)
 
 
   # Normalize counts to yield word probabilities
     for j in range(n):
         p[0][j] = (p[0][j]+1) / (wspam + 2)  # Add a small positive value to p[0][j] to prevent math domain error
         p[1][j] = (p[1][j]+1) / (wham + 2)  # Add a small positive value to p[1][j] to prevent math domain error
+
+
+
 
     # validation_documents, validation_labels = validation_data
     # correct = 0
@@ -117,9 +131,8 @@ def evaluate(test_file, b, p):
     precision = correct / len(test_labels)
     return precision
 
-
-# X = './data/shortdataset.csv'
-X = './data/spamHamDataset.csv'
+X = './data/shortdataset.csv'
+# X = './data/spamHamDataset.csv'
 
 # Train classifier
 b, p = train(X, './data/validationSet.csv')
