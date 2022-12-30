@@ -13,7 +13,8 @@ def train(X, validation_data):
     # Read documents X and labels Y
     documents = []
     labels = []
-    with open(X, 'r') as csv_file:
+    # encoding = 'cp850'
+    with open(X, 'r', encoding='cp850') as csv_file:
         csv_reader = csv.reader(csv_file)
         for row in csv_reader:
             documents.append(row[1])
@@ -118,19 +119,19 @@ def evaluate(test_file, b, p):
     precision = correct / len(test_labels)
     return precision
 
+def main():
+    # X = './data/shortdataset.csv'
+    X = './data/spamHamDataset.csv'
 
-X = './data/shortdataset.csv'
-# X = './data/spamHamDataset.csv'
+    # Train classifier
+    b, p = train(X, './data/validationSet.csv')
 
-# Train classifier
-b, p = train(X, './data/validationSet.csv')
+    # Test classifier on test dataset
+    test_file = './data/testSet.csv'
+    precision = evaluate(test_file, b, p)
+    print(f'Test precision: {precision:.9f}')
 
-# Test classifier on test dataset
-test_file = './data/testSet.csv'
-precision = evaluate(test_file, b, p)
-print(f'Test precision: {precision:.9f}')
-
-# Test classifier on validation dataset
-validation_file = './data/validationSet.csv'
-precision = evaluate(validation_file, b, p)
-print(f'Validation precision: {precision:.9f}')
+    # Test classifier on validation dataset
+    validation_file = './data/validationSet.csv'
+    precision = evaluate(validation_file, b, p)
+    print(f'Validation precision: {precision:.9f}')

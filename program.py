@@ -1,16 +1,16 @@
 #from nb import naivebayes
 #from perceptron import function
-import naivebayes
+import naive_bayes
 import sudk
 
 def main():
-    choice = input("Escolha o algoritmo a usar NB ou Perceptron\n")
+    choice = input("Escolha o algoritmo a usar NB / Perceptron / AC3\n")
     if (choice == "nb"):
-        naivebayes.main()
+        naive_bayes.main()
     elif(choice =="perceptron"):
         #function()
         return
-    elif(choice =="sdk"):
+    elif(choice =="ac3"):
         sudk.main()
         return
     else:
