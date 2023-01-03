@@ -2,12 +2,12 @@
 import csv
 import math
 
-c = 0.8
+c = 0.9
 global b
 def train(X, validation_data):
 
     print("train")
-    global p
+    global p    # matrix p
     global dictionary
     global n
     # Read documents X and labels Y
@@ -55,29 +55,16 @@ def train(X, validation_data):
                 wham += documents[i].count(word)
 
 
+
   # Normalize counts to yield word probabilities
     for j in range(n):
         p[0][j] = (p[0][j]+1) / (wspam + 2)  # Add a small positive value to p[0][j] to prevent math domain error
         p[1][j] = (p[1][j]+1) / (wham + 2)  # Add a small positive value to p[1][j] to prevent math domain error
 
-    # validation_documents, validation_labels = validation_data
-    # correct = 0
-    # for i in range(len(validation_labels)):
-    #     score_threshold = 0
-    #     for j in range(n):
-    #         word = list(dictionary)[j]
-    #         score_threshold += validation_documents[i].count(word) * (math.log(p[0][j]) - math.log(p[1][j]))
-
-    #     if score_threshold > 0 and validation_labels[i] == 'spam':
-    #         correct += 1
-    #     elif score_threshold <= 0 and validation_labels[i] == 'ham':
-    #         correct += 1
-
-    # precision = correct / len(validation_labels)
 
     print("total words of spam: ", wspam)
     print("total words of ham: ", wham)
-    return b, p#, precision
+    return b, p
 
 
 def classify(x, b, p):
@@ -96,28 +83,63 @@ def classify(x, b, p):
 
 def evaluate(test_file, b, p):
   # Read test data from CSV file
-    test_documents = []
-    test_labels = []
+    test_emails = []
     with open(test_file, 'r', encoding='cp850') as csv_file:
         csv_reader = csv.reader(csv_file)
         for row in csv_reader:
-            test_documents.append(row[1])
-            test_labels.append(row[0])
+            test_emails.append(row)
 
-    # print(len(test_documents), len(test_labels))
-  # Classify test documents and compare to true labels
-    correct = 0
-    for i in range(len(test_documents)):
-        prediction = classify(test_documents[i], b, p)
-        # print("email:", test_documents[i], "label:", test_labels[i])
-        # print("prediction:", prediction)
-        # print("")
-        if prediction == test_labels[i]:
-            correct += 1
 
   # Calculate and return precision
-    precision = correct / len(test_labels)
-    return precision
+    tentativas = 0
+    tentativasCertas = 0
+    tentativasIncorretas = 0
+    emailsSpam = 0
+    emailsHam = 0
+    truePositives = 1
+    trueNegatives = 0
+    falsePositives = 1
+    falseNegatives = 0
+
+    for email in test_emails:
+        classifier = classify(email, b, p)
+        if classifier == email[0]:
+            tentativasCertas += 1
+            if classifier == "spam":
+                truePositives += 1
+            elif classifier == "ham":
+                trueNegatives += 1
+        else:
+            tentativasIncorretas += 1
+            if classifier == "spam":
+                falsePositives += 1
+            elif classifier == "ham":
+                falseNegatives += 1
+        if email[0] == "spam":
+            emailsSpam += 1
+        elif email[0] == "ham":
+            emailsHam += 1
+        tentativas += 1
+
+    print("\nNaive Bayes: \n")
+    print("O Algoritmo do Naive Bayes percorreu ", tentativas, "emails, sendo observado o seguinte: \n")
+    print("Dos ", emailsSpam, "emails de spam, avaliou corretamente ", truePositives, " emails e ", emailsSpam - truePositives, " emails foram avaliados de forma incorreta.")
+    print("Dos ", emailsHam, "emails de ham, avaliou corretamente ", trueNegatives, " emails e ", emailsHam - trueNegatives, " emails foram avaliados de forma incorreta.")
+    print("A taxa de sucesso geral é de", ((tentativasCertas/tentativas) * 100), "% e uma taxa de insucesso geral de", ((tentativasIncorretas/tentativas * 100)), "% \n")
+    print("Métricas de Classificação: \n")
+    print("A Accuracy calculada é:", (tentativasCertas / tentativas))
+    print("A Error rate calculada é:", (tentativasIncorretas / tentativas))
+    print("A Sensivity calculada é:", (truePositives / (truePositives + falseNegatives)))
+    print("A Specificity calculada é:", (trueNegatives / (trueNegatives + falsePositives)))
+    print("A Precision calculada é:", (truePositives / (truePositives + falsePositives)))
+    print("O Recall calculado é:", (truePositives / (truePositives + trueNegatives)))
+    p = truePositives / (truePositives + falsePositives)
+    r = truePositives / (truePositives + trueNegatives)
+    print("A F-Measure calculada é:", ((2 * p * r) / (p + r)))
+    print("O Geometric-mean calculado é:", math.sqrt(truePositives * trueNegatives))
+
+
+    #Classificamos cada email como spam ou ham e retornamos -1 ou 1 
 
 def main():
     X = './data/shortdataset.csv'
@@ -127,11 +149,11 @@ def main():
     b, p = train(X, './data/validationSet.csv')
 
     # Test classifier on test dataset
-    test_file = './data/testSet.csv'
-    precision = evaluate(test_file, b, p)
-    print(f'Test precision: {precision:.9f}')
+    # test_file = './data/testSet.csv'
+    # precision = evaluate(test_file, b, p)
+    # print(f'Test precision: {precision:.9f}')
 
     # Test classifier on validation dataset
     validation_file = './data/validationSet.csv'
-    precision = evaluate(validation_file, b, p)
-    print(f'Validation precision: {precision:.9f}')
+    evaluate(validation_file, b, p)
+    # performanceNaiveBayes(validation_file)
