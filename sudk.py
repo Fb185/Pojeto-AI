@@ -1,4 +1,3 @@
-import pdb
 def main(puzzle):
     csp = create_sudoku_csp(puzzle)  #criar o CSP para usar no ac3 a partir do puzzle input
     for i in range(len(puzzle)):
@@ -18,7 +17,6 @@ def main(puzzle):
         print("No solution found.")
 
 def create_sudoku_csp(puzzle):
-    pdb.set_trace()
 
     n = len(puzzle)
 
